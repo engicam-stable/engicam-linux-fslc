@@ -64,8 +64,8 @@ static int ksz8081_phy_fixup(struct phy_device *dev)
 #define PHY_ID_KSZ8081_MNRN61	0x00221561
 static void __init imx6ul_enet_phy_init(void)
 {
-	phy_register_fixup(PHY_ANY_ID, PHY_ID_KSZ8081_MNRN60, 0xffffffff, ksz8081_phy_fixup);
-	phy_register_fixup(PHY_ANY_ID, PHY_ID_KSZ8081_MNRN61, 0xffffffff, ksz8081_phy_fixup);
+//	phy_register_fixup(PHY_ANY_ID, PHY_ID_KSZ8081_MNRN60, 0xffffffff, ksz8081_phy_fixup);
+//	phy_register_fixup(PHY_ANY_ID, PHY_ID_KSZ8081_MNRN61, 0xffffffff, ksz8081_phy_fixup);
 }
 
 #define OCOTP_CFG3			0x440
@@ -166,6 +166,21 @@ static inline void imx6ul_enet_init(void)
 		imx6_enet_mac_init("fsl,imx6ul-fec", "fsl,imx6ull-ocotp");
 }
 
+#define IMX6UL_GPR1_SAI2_CLK_DIR		(0x1 << 20)
+#define IMX6UL_GPR1_SAI2_CLK_OUTPUT		(0x1 << 20)
+static inline void imx6ul_gea_init(void)
+{
+	struct regmap *gpr;
+
+	gpr = syscon_regmap_lookup_by_compatible("fsl,imx6ul-iomuxc-gpr");
+	if (!IS_ERR(gpr))
+		regmap_update_bits(gpr, IOMUXC_GPR1, IMX6UL_GPR1_SAI2_CLK_DIR,
+				   IMX6UL_GPR1_SAI2_CLK_OUTPUT);
+	else
+		pr_err("failed to find fsl,imx6ul-iomux-gpr regmap\n");
+
+}
+
 static void __init imx6ul_init_machine(void)
 {
 	struct device *parent;
@@ -178,6 +193,7 @@ static void __init imx6ul_init_machine(void)
 	imx6ul_enet_init();
 	imx_anatop_init();
 	imx6ul_pm_init();
+	imx6ul_gea_init();
 }
 
 static void __init imx6ul_init_irq(void)

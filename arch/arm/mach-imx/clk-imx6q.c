@@ -85,7 +85,8 @@ static const char *cko_sels[] = { "cko1", "cko2", };
 static const char *lvds_sels[] = {
 	"dummy", "dummy", "dummy", "dummy", "dummy", "dummy",
 	"pll4_audio", "pll5_video", "pll8_mlb", "enet_ref",
-	"pcie_ref_125m", "sata_ref_100m",
+	"pcie_ref_125m", "sata_ref_100m", "usbphy1", "usbphy2", 
+        "dummy", "dummy", "dummy", "dummy", "osc"
 };
 static const char *pll_bypass_src_sels[] = { "osc", "lvds1_in", "lvds2_in", "dummy", };
 static const char *pll1_bypass_sels[] = { "pll1", "pll1_bypass_src", };
@@ -107,6 +108,8 @@ static unsigned int const clks_init_on[] __initconst = {
 	IMX6QDL_CLK_ARM,
 	IMX6QDL_CLK_OCRAM,
 	IMX6QDL_CLK_AXI,
+	IMX6QDL_CLK_ENET,
+	IMX6QDL_CLK_ENET_REF,
 };
 
 static struct clk_div_table clk_enet_ref_table[] = {
@@ -897,8 +900,8 @@ static void __init imx6q_clocks_init(struct device_node *ccm_node)
 		imx_clk_prepare_enable(clk[IMX6QDL_CLK_USBPHY2_GATE]);
 	}
 
-	/*Set enet_ref clock to 125M to supply for RGMII tx_clk */
-	clk_set_rate(clk[IMX6QDL_CLK_ENET_REF], 125000000);
+	/*Set enet_ref clock to 50M to supply for RMII tx_clk */
+	clk_set_rate(clk[IMX6QDL_CLK_ENET_REF], 50000000);
 
 #ifdef CONFIG_MX6_VPU_352M
 	/*

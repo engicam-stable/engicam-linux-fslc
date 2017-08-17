@@ -32,6 +32,7 @@
 #include <linux/mfd/syscon.h>
 #include <linux/mfd/syscon/imx6q-iomuxc-gpr.h>
 #include <linux/of_net.h>
+#include <linux/of_gpio.h>
 #include <asm/mach/arch.h>
 #include <asm/mach/map.h>
 #include <asm/system_misc.h>
@@ -39,6 +40,8 @@
 #include "common.h"
 #include "cpuidle.h"
 #include "hardware.h"
+
+static int edimm_ver = 10;
 
 /* For imx6q sabrelite board: set KSZ9021RN RGMII pad skew */
 static int ksz9021rn_phy_fixup(struct phy_device *phydev)
@@ -70,13 +73,19 @@ static void mmd_write_reg(struct phy_device *dev, int device, int reg, int val)
 
 static int ksz9031rn_phy_fixup(struct phy_device *dev)
 {
-	/*
-	 * min rx data delay, max rx/tx clock delay,
-	 * min rx/tx control delay
-	 */
-	mmd_write_reg(dev, 2, 4, 0);
-	mmd_write_reg(dev, 2, 5, 0);
-	mmd_write_reg(dev, 2, 8, 0x003ff);
+	printk("Init ksz9031rn PHY\n");
+
+	//write register 6 addr 2 TXD[0:3] skew
+	mmd_write_reg(dev, 2, 6, 0x4111);
+
+	//write register 5 addr 2 RXD[0:3] skew
+	mmd_write_reg(dev, 2, 5, 0x47a7);
+
+	//write register 4 addr 2 RX_DV TX_EN skew
+	mmd_write_reg(dev, 2, 4, 0x004A);
+
+	//write register 8 addr 2 RX_CLK GTX_CLK skew
+	mmd_write_reg(dev, 2, 8, 0x0273);
 
 	return 0;
 }
@@ -193,59 +202,81 @@ static void __init imx6q_enet_phy_init(void)
 	}
 }
 
-static void __init imx6q_1588_init(void)
+#define ICORE_GPIO_EDIMM_VER 191 /* GPIO6_31 */
+
+static void __init icore_set_enet_clock(void)
 {
-	struct device_node *np;
-	struct clk *ptp_clk;
+	int icore_ver_gpio;
 	struct regmap *gpr;
-
-	np = of_find_compatible_node(NULL, NULL, "fsl,imx6q-fec");
-	if (!np) {
-		pr_warn("%s: failed to find fec node\n", __func__);
-		return;
-	}
-
-	ptp_clk = of_clk_get(np, 2);
-	if (IS_ERR(ptp_clk)) {
-		pr_warn("%s: failed to get ptp clock\n", __func__);
-		goto put_node;
-	}
-
-	/*
-	 * If enet_ref from ANATOP/CCM is the PTP clock source, we need to
-	 * set bit IOMUXC_GPR1[21].  Or the PTP clock must be from pad
-	 * (external OSC), and we need to clear the bit.
-	 */
+	
 	gpr = syscon_regmap_lookup_by_compatible("fsl,imx6q-iomuxc-gpr");
-	if (!IS_ERR(gpr))
-		regmap_update_bits(gpr, IOMUXC_GPR1,
-				IMX6Q_GPR1_ENET_CLK_SEL_MASK,
-				IMX6Q_GPR1_ENET_CLK_SEL_ANATOP);
-	else
-		pr_err("failed to find fsl,imx6q-iomux-gpr regmap\n");
-
-	clk_put(ptp_clk);
-put_node:
-	of_node_put(np);
+	
+	icore_ver_gpio = ICORE_GPIO_EDIMM_VER;
+	
+	if (gpio_is_valid(icore_ver_gpio) &&
+	    !gpio_request_one(icore_ver_gpio, GPIOF_DIR_IN, "icore_ver_gpio"))
+	{
+		gpio_direction_input(icore_ver_gpio);
+	
+		if(!gpio_get_value(icore_ver_gpio))
+		{
+			edimm_ver = 15;
+			printk("i.Core M6 1.5 version\n");
+			regmap_update_bits(gpr, IOMUXC_GPR1,
+					IMX6Q_GPR1_ENET_CLK_SEL_MASK,
+					IMX6Q_GPR1_ENET_CLK_SEL_ANATOP);
+		}		
+		else
+		{
+			edimm_ver = 10;
+			printk("i.Core M6 standard 1.0 version\n");
+			regmap_update_bits(gpr, IOMUXC_GPR1,
+					IMX6Q_GPR1_ENET_CLK_SEL_MASK,
+					IMX6Q_GPR1_ENET_CLK_SEL_PAD);
+		}
+		gpio_free(icore_ver_gpio);
+	}
 }
+
 
 static void __init imx6q_csi_mux_init(void)
 {
-	/*
-	 * MX6Q SabreSD board:
-	 * IPU1 CSI0 connects to parallel interface.
-	 * Set GPR1 bit 19 to 0x1.
-	 *
-	 * MX6DL SabreSD board:
-	 * IPU1 CSI0 connects to parallel interface.
-	 * Set GPR13 bit 0-2 to 0x4.
-	 * IPU1 CSI1 connects to MIPI CSI2 virtual channel 1.
-	 * Set GPR13 bit 3-5 to 0x1.
-	 */
 	struct regmap *gpr;
 
 	gpr = syscon_regmap_lookup_by_compatible("fsl,imx6q-iomuxc-gpr");
+
 	if (!IS_ERR(gpr)) {
+		/*
+		 * MX6Q i.Core board:
+		 * IPU1 CSI0 connects to parallel interface.
+		 * IPU2 CSI1 connects to parallel interface.
+		 * Set GPR1 bit 19 and 20 to 0x1.
+		 *
+		 * MX6DL SabreSD board:
+		 * IPU1 CSI0 connects to parallel interface.
+		 * Set GPR13 bit 0-2 to 0x4.
+		 * IPU1 CSI1 connects to parallel interface.
+		 * Set GPR13 bit 3-5 to 0x4.
+		 */
+		if (of_machine_is_compatible("fsl,imx6-icore"))
+		{
+			if(cpu_is_imx6q())
+				regmap_update_bits(gpr, IOMUXC_GPR1, 3 << 19, 3 << 19);
+			else
+				regmap_update_bits(gpr, IOMUXC_GPR13, 0x3F, 0x24);
+		}
+
+		/*
+		 * MX6Q SabreSD board:
+		 * IPU1 CSI0 connects to parallel interface.
+		 * Set GPR1 bit 19 to 0x1.
+		 *
+		 * MX6DL SabreSD board:
+		 * IPU1 CSI0 connects to parallel interface.
+		 * Set GPR13 bit 0-2 to 0x4.
+		 * IPU1 CSI1 connects to MIPI CSI2 virtual channel 1.
+		 * Set GPR13 bit 3-5 to 0x1.
+		 */
 		if (of_machine_is_compatible("fsl,imx6q-sabresd") ||
 			of_machine_is_compatible("fsl,imx6q-sabreauto"))
 			regmap_update_bits(gpr, IOMUXC_GPR1, 1 << 19, 1 << 19);
@@ -307,7 +338,7 @@ static inline void imx6q_enet_init(void)
 {
 	imx6_enet_mac_init("fsl,imx6q-fec", "fsl,imx6q-ocotp");
 	imx6q_enet_phy_init();
-	imx6q_1588_init();
+
 	if (cpu_is_imx6q() && imx_get_soc_revision() == IMX_CHIP_REVISION_2_0)
 		imx6q_enet_clk_sel();
 }
@@ -424,6 +455,88 @@ static struct platform_device imx6q_cpufreq_pdev = {
 	.name = "imx6q-cpufreq",
 };
 
+static void __init icore_late_init(void)
+{
+	struct device_node *np;
+	struct platform_device *pdev;
+	struct pinctrl *pctl;
+	int icore_ver_gpio;
+
+	icore_set_enet_clock();
+
+	if(edimm_ver == 15) /* EDIMM 1.5 */
+		return;
+
+	np = of_find_node_by_path("/soc/aips-bus@02100000/usb@02184000");
+//	np = of_find_compatible_node(NULL, NULL, "fsl,imx6q-usb");
+	pdev = of_find_device_by_node(np);
+	if (!pdev) {
+		pr_err("%s: can't find usb otg device\n", __func__);
+		goto put_node;
+	}
+
+
+	icore_ver_gpio = of_get_named_gpio(np, "ver-gpios", 0);
+
+	if (gpio_is_valid(icore_ver_gpio) &&
+		!gpio_request_one(icore_ver_gpio, GPIOF_DIR_IN, "icore_ver_gpio")) {
+		if(gpio_get_value(icore_ver_gpio))
+		{
+			printk("i.Core revision C or older\n");
+			pctl = pinctrl_get_select(&pdev->dev, "rev_c"); 
+			if (IS_ERR(pctl)) {
+				pr_err("%s: can't get pinctrl state\n", __func__);
+				goto put_node;
+			}
+		}		
+		else
+			printk("i.Core revision D or higher\n");
+	}
+	else
+		goto put_node;	
+
+put_node:
+	of_node_put(np);
+
+}
+
+
+static void __init icore_rqs_late_init(void)
+{
+	struct device_node *np;
+	struct platform_device *pdev;
+	struct clk *lvds2_sel, *osc, *lvds2_out;
+
+	printk("uQseven i.Core-rqs module\n");
+
+	printk("Init clock for USB HUB on RQS....");
+	lvds2_sel = clk_get_sys(NULL, "lvds2_sel");
+	osc = clk_get_sys(NULL, "osc");
+	lvds2_out = clk_get_sys(NULL, "lvds2_out");
+	if (IS_ERR(osc) || IS_ERR(lvds2_sel) ||
+	    IS_ERR(lvds2_out))
+	{
+		printk("*** Error getting clock\n");
+		return;
+	}
+	clk_set_parent(lvds2_sel, osc);
+	clk_set_rate(lvds2_out, 24000000);
+	clk_prepare_enable(lvds2_out);
+	printk("Done\n");
+
+	np = of_find_node_by_path("/soc/aips-bus@02100000/usb@02184000");
+//	np = of_find_compatible_node(NULL, NULL, "fsl,imx6q-usb");
+	pdev = of_find_device_by_node(np);
+	if (!pdev) {
+		pr_err("%s: can't find usb otg device\n", __func__);
+		goto put_node;
+	}
+
+put_node:
+	of_node_put(np);
+
+}
+
 static void __init imx6q_init_late(void)
 {
 	/*
@@ -439,6 +552,16 @@ static void __init imx6q_init_late(void)
 		imx6q_opp_init();
 		platform_device_register(&imx6q_cpufreq_pdev);
 	}
+
+	if (of_machine_is_compatible("fsl,imx6-icore")) {
+				icore_late_init();
+		}
+
+	if (of_machine_is_compatible("fsl,imx6-icore-rqs")) {
+		icore_rqs_late_init();
+	}
+
+
 }
 
 static void __init imx6q_map_io(void)

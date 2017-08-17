@@ -1,6 +1,5 @@
 /*
  * Copyright 2015-2016 Freescale Semiconductor, Inc.
- * Copyright 2017 NXP.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -508,8 +507,8 @@
 				reg = <0x02098000 0x4000>;
 				interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
 				clocks = <&clks IMX6UL_CLK_GPT1_BUS>,
-					 <&clks IMX6UL_CLK_GPT_3M>;
-				clock-names = "ipg", "osc_per";
+					 <&clks IMX6UL_CLK_GPT1_SERIAL>;
+				clock-names = "ipg", "per";
 			};
 
 			gpio1: gpio@0209c000 {
@@ -731,7 +730,7 @@
 					offset = <0x38>;
 					mask = <0x61>;
 				};
-
+#ifdef TOLTO_GEA
 				snvs_pwrkey: snvs-powerkey {
 					compatible = "fsl,sec-v4.0-pwrkey";
 					regmap = <&snvs>;
@@ -739,6 +738,7 @@
 					linux,keycode = <KEY_POWER>;
 					wakeup;
 				};
+#endif				
 			};
 
 			epit1: epit@020d0000 {
@@ -841,8 +841,8 @@
 				compatible = "fsl,imx6ul-pwm", "fsl,imx27-pwm";
 				reg = <0x020fc000 0x4000>;
 				interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
-				clocks = <&clks IMX6UL_CLK_DUMMY>,
-					 <&clks IMX6UL_CLK_DUMMY>;
+				clocks = <&clks IMX6UL_CLK_PWM8>,
+					 <&clks IMX6UL_CLK_PWM8>;
 				clock-names = "ipg", "per";
 				#pwm-cells = <2>;
 			};
