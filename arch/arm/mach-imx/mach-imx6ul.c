@@ -37,6 +37,7 @@ static void __init imx6ul_enet_clk_init(void)
 
 }
 
+/*
 static int ksz8081_phy_fixup(struct phy_device *dev)
 {
 	if (dev && dev->interface == PHY_INTERFACE_MODE_MII) {
@@ -49,23 +50,11 @@ static int ksz8081_phy_fixup(struct phy_device *dev)
 
 	return 0;
 }
-
-/*
- * i.MX6UL EVK board RevA, RevB, RevC all use KSZ8081
- * Silicon revision 00, the PHY ID is 0x00221560, pass our
- * test with the phy fixup.
- */
-#define PHY_ID_KSZ8081_MNRN60	0x00221560
-/*
- * i.MX6UL EVK board RevC1 board use KSZ8081
- * Silicon revision 01, the PHY ID is 0x00221561.
- * This silicon revision still need the phy fixup setting.
- */
-#define PHY_ID_KSZ8081_MNRN61	0x00221561
+*/
+#define PHY_ID_KSZ8081	0x00221560
 static void __init imx6ul_enet_phy_init(void)
 {
-//	phy_register_fixup(PHY_ANY_ID, PHY_ID_KSZ8081_MNRN60, 0xffffffff, ksz8081_phy_fixup);
-//	phy_register_fixup(PHY_ANY_ID, PHY_ID_KSZ8081_MNRN61, 0xffffffff, ksz8081_phy_fixup);
+//	phy_register_fixup_for_uid(PHY_ID_KSZ8081, 0xffffffff,	ksz8081_phy_fixup);
 }
 
 #define OCOTP_CFG3			0x440
@@ -106,6 +95,7 @@ static void __init imx6ul_opp_check_speed_grading(struct device *cpu_dev)
 	val = readl_relaxed(base + OCOTP_CFG3);
 	val >>= OCOTP_CFG3_SPEED_SHIFT;
 	val &= 0x3;
+
 	if (cpu_is_imx6ul()) {
 		if (val < OCOTP_CFG3_SPEED_696MHZ) {
 			if (dev_pm_opp_disable(cpu_dev, 696000000))
@@ -166,8 +156,6 @@ static inline void imx6ul_enet_init(void)
 		imx6_enet_mac_init("fsl,imx6ul-fec", "fsl,imx6ull-ocotp");
 }
 
-#define IMX6UL_GPR1_SAI2_CLK_DIR		(0x1 << 20)
-#define IMX6UL_GPR1_SAI2_CLK_OUTPUT		(0x1 << 20)
 static inline void imx6ul_gea_init(void)
 {
 	struct regmap *gpr;
