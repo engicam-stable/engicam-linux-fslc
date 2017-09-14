@@ -193,6 +193,7 @@
 	status = "okay";
 };
 
+
 &hdmi_cec {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hdmi_cec_1>;
@@ -290,6 +291,14 @@
 	pinctrl-0 = <&pinctrl_uart2_1>;
 	status = "okay";
 };
+
+&uart3 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart3_2>;
+   	fsl,uart-has-rtscts;
+	status = "okay";
+};
+
 
 &gpmi {
 	pinctrl-names = "default";
