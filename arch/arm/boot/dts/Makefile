@@ -404,6 +404,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
 	imx6ul-9x9-evk-ldo.dtb
 dtb-$(CONFIG_SOC_IMX6ULL) += \
 	geal-mx6ull-starterkit.dtb \
+	imx6ul-microgea-loco7cap.dtb \
 	microgea-mx6ull-starterkit.dtb \
 	imx6ull-14x14-ddr3-arm2.dtb \
 	imx6ull-14x14-ddr3-arm2-adc.dtb \
