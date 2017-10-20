@@ -477,18 +477,26 @@
 
 &uart1 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_uart1>;
+	pinctrl-0 = <&pinctrl_uart1_1>;
 	status = "okay";
 };
 
-&uart5 { /* for bluetooth */
+&uart3 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_uart5>;
-	fsl,uart-has-rtscts;
+	pinctrl-0 = <&pinctrl_uart3_1>;
 	status = "okay";
-	/* for DTE mode, add below change */
-	/* fsl,dte-mode;*/
-	/* pinctrl-0 = <&pinctrl_uart5dte_1>; */
+};
+
+&uart5 { /* console */
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart5_2>;
+	status = "okay";
+};
+
+&uart6 { 
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart6_1>;
+	status = "okay";
 };
 
 &usbotg1 {
