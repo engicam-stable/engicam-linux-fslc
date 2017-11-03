@@ -432,6 +432,13 @@ config MFD_88PM860X
 	  select individual components like voltage regulators, RTC and
 	  battery-charger under the corresponding menus.
 
+config MFD_TPS6518X
+    tristate "Texas Instruments TPS6518X EPD PMIC core"
+        depends on I2C
+    help
+      This is the TPS6518X PMIC support. It includes
+      core support for communication with the TPS6518X chip.
+
 config MFD_MAX14577
 	bool "Maxim Semiconductor MAX14577/77836 MUIC + Charger Support"
 	depends on I2C=y
