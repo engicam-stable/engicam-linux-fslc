@@ -31,13 +31,7 @@
 		compatible = "fsl,imx6sx-pxp-v4l2", "fsl,imx6sl-pxp-v4l2";
 		status = "okay";
 	};
-#ifdef ICORE_TEST
-	// Fa comparire /dev/video16 e /dev/video17.. sembra non funzionare 
-	v4l2_out {
-		compatible = "fsl,mxc_v4l2_output";
-		status = "okay";
-	};
-#endif
+	
 	regulators {
 		compatible = "simple-bus";
 
@@ -95,11 +89,6 @@
 			"Headphone Jack", "HP_OUT";
 		mux-int-port = <1>;
 		mux-ext-port = <6>;
-	};
-
-	csi1_v4l2_cap {
-		compatible = "fsl,imx6sx-csi-v4l2", "fsl,imx6sl-csi-v4l2";
-		status = "okay";
 	};
 };
 
@@ -191,27 +180,6 @@
 		reset-gpios = <&gpio1 0 16>;
 	};
 
-	adv7180: adv7180@21 {
-		compatible = "adv,adv7180";
-		reg = <0x21>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_csi_2>;
-		clocks = <&clks IMX6SX_CLK_CSI>;
-		clock-names = "csi_mclk";
-		DOVDD-supply = <&reg_3V3>; /* 3.3v, enabled via 2.8 VGEN6 */
-		AVDD-supply = <&reg_3V3>;  /* 1.8v */
-		DVDD-supply = <&reg_3V3>;  /* 1.8v */
-		PVDD-supply = <&reg_3V3>;  /* 1.8v */
-//		pwn-gpios = <&gpio3 19 0>;  /* put on not used pin */
-		csi_id = <0>;
-		mclk = <24000000>;
-		mclk_source = <0>;
-		cvbs = <1>;
-		status = "disabled";
-
-	};
-#ifdef DA_SISTEMARE
-#endif
 };
 
 &iomuxc {
@@ -228,16 +196,12 @@
 &flexcan1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_flexcan1_2>;
-//	trx-en-gpio = <&gpio4 25 GPIO_ACTIVE_HIGH>;
-//	trx-stby-gpio = <&gpio4 27 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 };
 
 &flexcan2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_flexcan2_2>;
-//	trx-en-gpio = <&gpio4 25 GPIO_ACTIVE_HIGH>;
-//	trx-stby-gpio = <&gpio4 27 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 };
 
@@ -270,16 +234,6 @@
 
 };
 
-#ifdef TOLTO_ICORE
-&i2c4 {
-        clock-frequency = <100000>;
-        pinctrl-names = "default";
-        pinctrl-0 = <&pinctrl_i2c4_1>;
-        status = "okay";
-
-};
-#endif
-
 &iomuxc {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog>;
@@ -303,11 +257,6 @@
 				MX6SX_PAD_QSPI1B_DQS__GPIO4_IO_28	0x17059 /* GPIO_SP13 */
 				MX6SX_PAD_QSPI1B_DATA2__GPIO4_IO_26	0x17059 /* GPIO_SP14 */
 				MX6SX_PAD_QSPI1B_DATA3__GPIO4_IO_27	0x17059 /* GPIO_SP15 */
-#ifndef TEST_PWM
-				MX6SX_PAD_GPIO1_IO11__GPIO1_IO_11	0x17059 /* GPIO1_IO11/PWM2 */
-				MX6SX_PAD_GPIO1_IO12__GPIO1_IO_12	0x17059 /* GPIO1_IO12/PWM3 */
-				MX6SX_PAD_GPIO1_IO13__GPIO1_IO_13	0x17059 /* GPIO1_IO13/PWM4 */
-#endif
 				MX6SX_PAD_GPIO1_IO02__GPIO1_IO_2	0x17059 /* SD1_CD */
 				MX6SX_PAD_SD4_DATA4__GPIO6_IO_18	0x17059 /* PEN_IRQ */
 				MX6SX_PAD_SD4_DATA5__GPIO6_IO_19 	0x17059	/* ETH_PHY1_RES */
@@ -396,30 +345,6 @@
 	status = "okay";
 };
 
-#ifdef TOLTO_ICORE
-&usdhc3 {
-	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-	pinctrl-0 = <&pinctrl_usdhc3_1>;
-	pinctrl-1 = <&pinctrl_usdhc3_1_100mhz>;
-	pinctrl-2 = <&pinctrl_usdhc3_1_200mhz>;
-	bus-width = <8>;
-	cd-gpios = <&gpio2 10 0>;
-	wp-gpios = <&gpio2 15 0>;
-	keep-power-in-suspend;
-	enable-sdio-wakeup;
-	vmmc-supply = <&reg_3V3>;
-	status = "okay";
-};
-
-&usdhc4 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_usdhc4_2 &pinctrl_usdhc4_gpios>;
-	cd-gpios = <&gpio6 21 0>;
-	wp-gpios = <&gpio6 20 0>;
-	status = "okay";
-};
-#endif
-
 &lcdif1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_lcdif_dat_1
@@ -492,26 +417,14 @@
 
 &pwm2 {
 	pinctrl-names = "default";
-#ifdef TEST_PWM
-	pinctrl-0 = <&pinctrl_pwm2_0>;
-	status = "okay";
-#endif
 };
 
 &pwm3 {
 	pinctrl-names = "default";
-#ifdef TEST_PWM
-	pinctrl-0 = <&pinctrl_pwm3_0>;
-	status = "okay";
-#endif
 };
 
 &pwm4 {
 	pinctrl-names = "default";
-#ifdef TEST_PWM
-f	pinctrl-0 = <&pinctrl_pwm4_1>;
-	status = "okay";
-#endif
 };
 
 &pwm5 {	/* LCD CONTRAST */
@@ -524,31 +437,3 @@ f	pinctrl-0 = <&pinctrl_pwm4_1>;
 	status = "okay";
 };
 
-#ifdef TOLTO_ICORE
-&qspi2 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_qspi2_1>;
-	status = "okay";
-
-	flash0: s25fl128s@0 {
-		#address-cells = <1>;
-		#size-cells = <1>;
-		compatible = "spansion,s25fl128s";
-		spi-max-frequency = <66000000>;
-		reg = <0>;
-	};
-
-	flash1: s25fl128s@1 {
-		#address-cells = <1>;
-		#size-cells = <1>;
-		compatible = "spansion,s25fl128s";
-		spi-max-frequency = <66000000>;
-		reg = <1>;
-	};
-};
-#endif
-&vadc {
-	vadc_in = <0>;
-	csi_id = <1>;
-	status = "okay";
-};
