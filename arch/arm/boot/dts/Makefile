@@ -265,7 +265,9 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
 	imx6dl-gw552x.dtb \
 	imx6dl-hummingboard.dtb \
 	icoremx6dl-starterkit.dtb \
+	icoremx6dl-starterkit-cap.dtb \
 	icoremx6q-starterkit.dtb \
+	icoremx6q-starterkit-cap.dtb \
 	imx6sx-icore.dtb \
 	imx6dl-nitrogen6x.dtb \
 	imx6dl-phytec-pbab01.dtb \
@@ -375,10 +377,12 @@ dtb-$(CONFIG_SOC_IMX6SX) += \
 	imx6sx-19x19-arm2-csi.dtb \
 	imx6sx-19x19-arm2-gpmi-weim.dtb \
 	imx6sx-icore.dtb \
+	imx6sx-icore-cap.dtb \
 	imx6sx-icore-icu.dtb \
 	imx6sx-smarcore.dtb
 dtb-$(CONFIG_SOC_IMX6UL) += \
 	geamx6ul-starterkit.dtb \
+	geamx6ul-starterkit-cap.dtb \
 	geamx6ul-starterkit-emmc.dtb \
 	isiot-imx6ul.dtb \
 	isiot-imx6ul-emmc.dtb \
@@ -407,6 +411,7 @@ dtb-$(CONFIG_SOC_IMX6ULL) += \
 	geal-mx6ull-starterkit.dtb \
 	microgea-mx6ull-loco7cap.dtb \
 	microgea-mx6ull-starterkit.dtb \
+	microgea-mx6ull-starterkit-cap.dtb \
 	microgea-mx6ull-epd.dtb \
 	imx6ull-14x14-ddr3-arm2.dtb \
 	imx6ull-14x14-ddr3-arm2-adc.dtb \
