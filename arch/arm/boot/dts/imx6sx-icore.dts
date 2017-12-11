@@ -31,7 +31,7 @@
 		compatible = "fsl,imx6sx-pxp-v4l2", "fsl,imx6sl-pxp-v4l2";
 		status = "okay";
 	};
-	
+
 	regulators {
 		compatible = "simple-bus";
 
@@ -169,14 +169,14 @@
 		VDDA-supply = <&reg_3V3>;
 		VDDIO-supply = <&reg_3V3>;
 	};
-	
+
 	polytouch: edt-ft5x06@38 {
 		compatible = "edt,edt-ft5406";
 		reg = <0x38>;
-		pinctrl-names = "default";		
+		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_edt_ft5x06>;
 		interrupt-parent = <&gpio1>;
-		interrupts = <14 0>;	
+		interrupts = <14 0>;
 		reset-gpios = <&gpio1 0 16>;
 	};
 
@@ -186,7 +186,7 @@
 	touchpanel{
 		pinctrl_edt_ft5x06:  edt-ft5x06grp  {
 			fsl,pins = <
-				MX6SX_PAD_CSI_DATA00__GPIO1_IO_14 0x17059 /*interrupt*/ 
+				MX6SX_PAD_CSI_DATA00__GPIO1_IO_14 0x17059 /*interrupt*/
 				MX6SX_PAD_CSI_DATA02__GPIO1_IO_16 0x17059 /*reset*/
 			>;
 		};
@@ -257,7 +257,6 @@
 				MX6SX_PAD_QSPI1B_DQS__GPIO4_IO_28	0x17059 /* GPIO_SP13 */
 				MX6SX_PAD_QSPI1B_DATA2__GPIO4_IO_26	0x17059 /* GPIO_SP14 */
 				MX6SX_PAD_QSPI1B_DATA3__GPIO4_IO_27	0x17059 /* GPIO_SP15 */
-				MX6SX_PAD_GPIO1_IO02__GPIO1_IO_2	0x17059 /* SD1_CD */
 				MX6SX_PAD_SD4_DATA4__GPIO6_IO_18	0x17059 /* PEN_IRQ */
 				MX6SX_PAD_SD4_DATA5__GPIO6_IO_19 	0x17059	/* ETH_PHY1_RES */
 				MX6SX_PAD_SD4_DATA6__GPIO6_IO_20 	0x17059	/* ETH_PHY2_RES */
@@ -295,7 +294,7 @@
 	status = "okay";
 };
 
-&uart3 { 
+&uart3 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_uart3_1>;
 	fsl,uart-has-rtscts;
@@ -305,7 +304,7 @@
 &gpmi {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_gpmi_nand_1>;
-	status = "okay"; 
+	status = "okay";
 	fsl,legacy-bch-geometry;
 	nand-on-flash-bbt;
 };
@@ -327,12 +326,13 @@
 &usdhc1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_usdhc1_1>;
-	cd-gpios = <&gpio1 2 0>;
-	non-removable;
+	cd-gpios = <&gpio1 2 GPIO_ACTIVE_LOW>;
 	no-1-8-v;
 	vmmc-supply = <&reg_3V3>;
 	status = "okay";
 };
+
+
 
 &usdhc2 {
 	pinctrl-names = "default";
