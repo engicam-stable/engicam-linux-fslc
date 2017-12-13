@@ -81,14 +81,14 @@
 	sound {
 		compatible = "fsl,imx6-icore-sgtl5000",
 			     "fsl,imx-audio-sgtl5000";
-		model = "imx6q-icore-sgtl5000";
-		cpu-dai = <&ssi1>;
-		audio-codec = <&codec>;
-		audio-routing =
-			"LINE_IN", "Line In Jack",
-			"Headphone Jack", "HP_OUT";
-		mux-int-port = <1>;
-		mux-ext-port = <6>;
+			model = "imx6q-icore-sgtl5000";
+        	ssi-controller = <&ssi1>;
+        	audio-codec = <&codec>;
+        	audio-routing =
+                	"LINE_IN", "Line In Jack",
+                	"Headphone Jack", "HP_OUT";
+        	mux-int-port = <1>;
+        	mux-ext-port = <6>;
 	};
 };
 
