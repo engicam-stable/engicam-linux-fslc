@@ -8,6 +8,12 @@
 
 #include "imx6sx-icore.dts"
 
+/{
+	memory {
+		linux,usable-memory = <0x80000000 0xC800000>;
+	};
+};
+
 &iomuxc {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog>;
