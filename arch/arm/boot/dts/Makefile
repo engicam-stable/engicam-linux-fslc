@@ -266,6 +266,8 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
 	imx6dl-hummingboard.dtb \
 	icoremx6dl-starterkit.dtb \
 	icoremx6dl-starterkit-cap.dtb \
+	icoremx6dl-ofcap7.dtb \
+	icoremx6dl-ofcap10.dtb \
 	icoremx6q-starterkit.dtb \
 	icoremx6q-starterkit-cap.dtb \
 	imx6sx-icore.dtb \
