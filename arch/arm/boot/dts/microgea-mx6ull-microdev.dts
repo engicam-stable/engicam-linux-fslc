@@ -53,18 +53,6 @@
 			gpios = <&gpio2 8 0>;
 		};	
 
-		SOM_WL_REG_ON {
-			gpio-export,name = "SOM_WL_REG_ON";
-			gpio-export,output = <1>;
-			gpios = <&gpio5 0 0>;
-		};
-
-		SOM_BT_REG_ON {
-			gpio-export,name = "SOM_BT_REG_ON";
-			gpio-export,output = <1>;
-			gpios = <&gpio5 1 0>;
-		};
-
 		ETH_ALIM_EN {
 			gpio-export,name = "ETH_ALIM_EN";
 			gpio-export,output = <1>;
@@ -148,7 +136,27 @@
 			regulator-max-microvolt = <1800000>;
 		};
 
+		wlreg_on: fixedregulator@100 {
+			compatible = "regulator-fixed";
+			regulator-name = "wlreg_on";
+			gpio = <&gpio5 0 0>;
+			startup-delay-us = <100>;
+			enable-active-high;
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+			regulator-always-on;
+		};
 
+		btreg_on: fixedregulator@200 {
+			compatible = "regulator-fixed";
+			regulator-name = "btreg_on";
+			gpio = <&gpio5 1 0>;
+			startup-delay-us = <100>;
+			enable-active-high;
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+			regulator-always-on;
+		};
 	};
 
 };
