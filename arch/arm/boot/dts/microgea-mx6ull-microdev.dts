@@ -326,6 +326,7 @@
 &uart8 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_uart8>;
+	vmmc-supply = <&btreg_on>;
 	fsl,uart-has-rtscts;
 	status = "okay";
 };
@@ -357,7 +358,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_usdhc2>;
 	no-1-8-v;
-	vmmc-supply = <&reg_out_3v3>;
+	vmmc-supply = <&wlreg_on>;
 	keep-power-in-suspend;
 	non-removable;
 	status = "okay";
