@@ -358,11 +358,9 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_usdhc2>;
 	no-1-8-v;
-	vmmc-supply = <&wlreg_on>;
-	keep-power-in-suspend;
 	non-removable;
+	vmmc-supply = <&wlreg_on>;
 	status = "okay";
-	reset-gpios = <&gpio5 0 1>;	// WF111 reset on GEA M6UL starterkit
 };
 
 &i2c1 {
@@ -418,7 +416,7 @@
 	imx6ul-evk {
 		pinctrl_hog_1: hoggrp-1 {
 			fsl,pins = <
-				MX6UL_PAD_GPIO1_IO03__REF_CLK_32K  	0x1b0b0
+				MX6UL_PAD_GPIO1_IO03__REF_CLK_32K  	0x1b090
 				MX6UL_PAD_UART1_RTS_B__GPIO1_IO19  	0x17059 /*CD sdhc1 */
 				MX6UL_PAD_SNVS_TAMPER2__GPIO5_IO02 	0x1b0b0 /* DISP0_PWD */
 				MX6UL_PAD_ENET2_RX_DATA0__GPIO2_IO08 	0x1b0b0 /* LCD_ALIM_EN */
@@ -606,12 +604,12 @@
 
 		pinctrl_usdhc2: usdhc2grp {
 			fsl,pins = <
-				MX6UL_PAD_CSI_VSYNC__USDHC2_CLK     0x17070
-				MX6UL_PAD_CSI_HSYNC__USDHC2_CMD     0x10070
-				MX6UL_PAD_CSI_DATA00__USDHC2_DATA0  0x17070
-				MX6UL_PAD_CSI_DATA01__USDHC2_DATA1  0x17070
-				MX6UL_PAD_CSI_DATA02__USDHC2_DATA2  0x17070
-				MX6UL_PAD_CSI_DATA03__USDHC2_DATA3  0x17070
+				MX6UL_PAD_CSI_VSYNC__USDHC2_CLK     0x10058
+				MX6UL_PAD_CSI_HSYNC__USDHC2_CMD     0x17058
+				MX6UL_PAD_CSI_DATA00__USDHC2_DATA0  0x17058
+				MX6UL_PAD_CSI_DATA01__USDHC2_DATA1  0x17058
+				MX6UL_PAD_CSI_DATA02__USDHC2_DATA2  0x17058
+				MX6UL_PAD_CSI_DATA03__USDHC2_DATA3  0x17058
 			>;
 		};
 
