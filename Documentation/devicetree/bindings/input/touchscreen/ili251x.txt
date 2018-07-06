@@ -1,0 +1,35 @@
+Ilitek ili251x touchscreen driver
+
+This driver uses protocol version 3 and should be compatible with other
+Ilitek touch controllers that use protocol 3.x
+
+Required properties:
+ - compatible:  "ili251x"
+ - reg:         I2C slave address of the chip (0x41)
+ - interrupt-parent: a phandle pointing to the interrupt controller
+                     serving the interrupt for this chip
+ - interrupts:       interrupt specification for the touchdetect
+                     interrupt
+
+Optional properties:
+ - reset-gpios: GPIO specification for the RESET input
+
+ - pinctrl-names: should be "default"
+ - pinctrl-0:   a phandle pointing to the pin settings for the
+                control gpios
+ - max-fingers: the maximum number of fingers to handle
+ - pressure: support pressure data
+ - generic options	   : See touchscreen.txt
+
+Example:
+
+	ili251x@41 {
+		compatible = "ili251x";
+		reg = <0x41>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_touchpanel>;
+		interrupt-parent = <&gpio5>;
+		interrupts = <20 IRQ_TYPE_EDGE_FALLING>;
+		reset-gpios = <&gpio5 18 GPIO_ACTIVE_HIGH>;
+		max-fingers = <6>;
+	};
