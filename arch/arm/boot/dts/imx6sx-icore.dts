@@ -131,7 +131,6 @@
 &fec1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_enet1_2 &pinctrl_enet1_clkout_2>;
-	pinctrl-assert-gpios = <&gpio6 19 GPIO_ACTIVE_HIGH>;
 	phy-mode = "mii";
 	fsl,num_tx_queues=<3>;
 	fsl,num_rx_queues=<3>;
@@ -141,7 +140,6 @@
 &fec2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_enet2_2>;
-	pinctrl-assert-gpios = <&gpio6 20 GPIO_ACTIVE_HIGH>;
 	phy-mode = "mii";
 	fsl,num_tx_queues=<3>;
 	fsl,num_rx_queues=<3>;
