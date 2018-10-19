@@ -332,6 +332,7 @@
 &usdhc1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_usdhc1>;
+	max-frequency = <25000000>;
 	bus-width = <4>;
 	cd-gpios = <&gpio1 19 GPIO_ACTIVE_LOW>;
 	vmmc-supply = <&reg_out_3v3>;
@@ -344,6 +345,7 @@
 &usdhc2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_usdhc2>;
+	max-frequency = <20000000>;
 	no-1-8-v;
 	non-removable;
 	vmmc-supply = <&wlreg_on>;
@@ -591,7 +593,7 @@
 
 		pinctrl_usdhc2: usdhc2grp {
 			fsl,pins = <
-				MX6UL_PAD_CSI_VSYNC__USDHC2_CLK     0x10058
+				MX6UL_PAD_CSI_VSYNC__USDHC2_CLK     0x10051
 				MX6UL_PAD_CSI_HSYNC__USDHC2_CMD     0x17058
 				MX6UL_PAD_CSI_DATA00__USDHC2_DATA0  0x17058
 				MX6UL_PAD_CSI_DATA01__USDHC2_DATA1  0x17058

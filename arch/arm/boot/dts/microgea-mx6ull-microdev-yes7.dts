@@ -94,6 +94,12 @@
 			gpio-export,output = <0>;
 			gpios = <&gpio2 9 0>;
 		};
+
+		MCLK_AUDIO {
+			gpio-export,name = "MCLK_AUDIO";
+			gpio-export,output = <0>;
+			gpios = <&gpio1 11 0>;
+		};
 	};
 
 
@@ -276,7 +282,7 @@
 &sai2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_sai2>;    
-	status = "okay";
+	status = "disabled";
 };
 
 
@@ -326,6 +332,7 @@
 &usdhc1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_usdhc1>;
+	max-frequency = <25000000>;
 	bus-width = <4>;
 	cd-gpios = <&gpio1 19 GPIO_ACTIVE_LOW>;
 	vmmc-supply = <&reg_out_3v3>;
@@ -338,6 +345,7 @@
 &usdhc2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_usdhc2>;
+	max-frequency = <20000000>;
 	no-1-8-v;
 	non-removable;
 	vmmc-supply = <&wlreg_on>;
@@ -410,7 +418,7 @@
 				MX6UL_PAD_SNVS_TAMPER5__GPIO5_IO05	0x1b0b0 /*UMTS_ON*/
 				MX6UL_PAD_CSI_DATA05__GPIO4_IO26	0x1b0b0 /*UMTS_STOP*/
 				MX6UL_PAD_ENET2_RX_DATA1__GPIO2_IO09    0x1b0b0 /*DISP_BIT_MODE*/
-
+				MX6UL_PAD_JTAG_TMS__GPIO1_IO11          0x1b0b0 /*MCLK AUDIO*/						   
 			>;
 		};
 
@@ -422,7 +430,7 @@
 				MX6UL_PAD_ENET1_TX_EN__ENET1_TX_EN	0x1b0b0
 				MX6UL_PAD_ENET1_TX_DATA0__ENET1_TDATA00	0x1b0b0
 				MX6UL_PAD_ENET1_TX_DATA1__ENET1_TDATA01	0x1b0b0
-				MX6UL_PAD_ENET1_TX_CLK__ENET1_REF_CLK1	0x4001b031
+				MX6UL_PAD_ENET1_TX_CLK__ENET1_REF_CLK1	0x4001b011
 				MX6UL_PAD_GPIO1_IO07__ENET1_MDC		0x1b0b0
 				MX6UL_PAD_GPIO1_IO06__ENET1_MDIO	0x1b0b0
 			>;
@@ -586,7 +594,7 @@
 
 		pinctrl_usdhc2: usdhc2grp {
 			fsl,pins = <
-				MX6UL_PAD_CSI_VSYNC__USDHC2_CLK     0x10058
+				MX6UL_PAD_CSI_VSYNC__USDHC2_CLK     0x10051
 				MX6UL_PAD_CSI_HSYNC__USDHC2_CMD     0x17058
 				MX6UL_PAD_CSI_DATA00__USDHC2_DATA0  0x17058
 				MX6UL_PAD_CSI_DATA01__USDHC2_DATA1  0x17058
