@@ -271,6 +271,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
 	icoremx6q-starterkit.dtb \
 	icoremx6q-starterkit-cap.dtb \
 	icoremx6dl-amp-ofcap7.dtb \
+	icoremx6q-ofcap7.dtb \
 	imx6sx-icore.dtb \
 	imx6sx-icore-m4.dtb \
 	imx6dl-nitrogen6x.dtb \
