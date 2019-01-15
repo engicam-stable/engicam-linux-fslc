@@ -6,7 +6,7 @@
  * published by the Free Software Foundation.
  */
 
-#include "imx6sx-icore-of-5.7p.dts"
+#include "imx6sx-icore-of-5-7p.dts"
 
 /{
 	memory {

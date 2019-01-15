@@ -383,9 +383,9 @@ dtb-$(CONFIG_SOC_IMX6SX) += \
 	imx6sx-19x19-arm2-csi.dtb \
 	imx6sx-19x19-arm2-gpmi-weim.dtb \
 	imx6sx-icore.dtb \
-	imx6sx-icore-of-5.7p.dtb \
+	imx6sx-icore-of-5-7p.dtb \
 	imx6sx-icore-m4.dtb \
-	imx6sx-icore-m4-of-5.7p.dtb \
+	imx6sx-icore-m4-of-5-7p.dtb \
 	imx6sx-icore-cap.dtb \
 	imx6sx-icore-icu.dtb \
 	imx6sx-smarcore.dtb
