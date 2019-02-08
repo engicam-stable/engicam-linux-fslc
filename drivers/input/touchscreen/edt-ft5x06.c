@@ -186,7 +186,7 @@ static irqreturn_t edt_ft5x06_ts_isr(int irq, void *dev_id)
 	case M09:
 		cmd = 0x02;
 		offset = 1;
-		tplen = 6;
+		tplen = 4;
 		datalen = 29;
 		break;
 
@@ -1038,12 +1038,10 @@ static int edt_ft5x06_ts_probe(struct i2c_client *client,
 	__set_bit(EV_KEY, input->evbit);
 	__set_bit(EV_ABS, input->evbit);
 	__set_bit(BTN_TOUCH, input->keybit);
-	input_set_abs_params(input, ABS_X, 0, tsdata->num_x * 64 - 1, 0, 0);
-	input_set_abs_params(input, ABS_Y, 0, tsdata->num_y * 64 - 1, 0, 0);
-	input_set_abs_params(input, ABS_MT_POSITION_X,
-			     0, tsdata->num_x * 64 - 1, 0, 0);
-	input_set_abs_params(input, ABS_MT_POSITION_Y,
-			     0, tsdata->num_y * 64 - 1, 0, 0);
+	input_set_abs_params(input, ABS_X, 0, 1280, 0, 0);
+	input_set_abs_params(input, ABS_Y, 0, 800, 0, 0);
+	input_set_abs_params(input, ABS_MT_POSITION_X, 0, 1280, 0, 0);
+	input_set_abs_params(input, ABS_MT_POSITION_Y, 0, 800, 0, 0);
 
 	if (!pdata)
 		touchscreen_parse_of_params(input);
@@ -1132,6 +1130,7 @@ static const struct of_device_id edt_ft5x06_of_match[] = {
 	{ .compatible = "edt,edt-ft5206", },
 	{ .compatible = "edt,edt-ft5306", },
 	{ .compatible = "edt,edt-ft5406", },
+	{ .compatible = "edt,edt-ft5826", },
 	{ /* sentinel */ }
 };
 MODULE_DEVICE_TABLE(of, edt_ft5x06_of_match);
