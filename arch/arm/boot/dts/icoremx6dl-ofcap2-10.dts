@@ -1,0 +1,121 @@
+/*
+ * Copyright (C) 2013 Freescale Semiconductor, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+/dts-v1/;
+
+#include "imx6dl.dtsi"
+#include "imx6qdl-icore.dtsi"
+ 
+/ {
+	model = "Engicam i.CoreM6 DualLite/Solo open frame 2.0";
+	compatible = "fsl,imx6-icore", "fsl,imx6dl";
+
+	regulators {
+		compatible = "simple-bus";
+
+		wlreg_on: fixedregulator@100 {
+			compatible = "regulator-fixed";
+			regulator-name = "wlreg_on";
+			gpio = <&gpio6 2 0>;
+			startup-delay-us = <100>;
+			enable-active-high;
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+			regulator-always-on;
+		};
+
+		btreg_on: fixedregulator@200 {
+			compatible = "regulator-fixed";
+			regulator-name = "btreg_on";
+			gpio = <&gpio6 3 0>;
+			startup-delay-us = <100>;
+			enable-active-high;
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+			regulator-always-on;
+		};
+	};
+};
+
+&mxcfb1 {
+	compatible = "fsl,mxc_sdc_fb";
+	disp_dev = "ldb";
+	interface_pix_fmt = "RGB24";
+	mode_str ="Amp-WD";
+	default_bpp = <32>;
+	int_clk = <0>;
+	late_init = <0>;
+	status = "okay";
+};
+
+&mxcfb2 {
+	status = "okay";
+};
+
+&ldb {
+	status = "okay";
+
+	lvds-channel@0 {
+		fsl,data-mapping = "spwg";
+		fsl,data-width = <24>;
+		status = "okay";
+		crtc = "ipu1-di0";
+		primary;
+
+		display-timings {
+                        native-mode = <&timing1>;
+                        timing1: hsd100pxn1 {
+                                clock-frequency = <60000000>;
+                                hactive = <1280>;
+                                vactive = <800>;
+                                hback-porch = <40>;
+                                hfront-porch = <40>;
+                                vback-porch = <10>;
+                                vfront-porch = <3>;
+                                hsync-len = <80>;
+                                vsync-len = <10>;
+                        };
+                };
+	};
+};
+
+&i2c3 {
+
+	codec: sgtl5000@0a {
+		compatible = "fsl,sgtl5000";
+		reg = <0x0a>;
+		clocks = <&clks 201>;
+		VDDA-supply = <&reg_2p5v>;
+		VDDIO-supply = <&reg_3p3v>;
+		VDDD-supply = <&reg_1p8v>;
+	};
+	
+	pcf8563: rtc@51 {
+		compatible = "pcf8563";
+		reg = <0x51>;
+	};
+};
+
+&usdhc2 {
+	pinctrl-names = "default";
+	vmmc-supply = <&wlreg_on>;
+};
+
+
+&iomuxc {
+	hog {
+		pinctrl_hog: hoggrp {
+			fsl,pins = <
+				MX6QDL_PAD_GPIO_2__GPIO1_IO02 0x1f059
+				MX6QDL_PAD_EIM_D19__GPIO3_IO19 0x1f059 /* not used pin for ADV7180 driver compatibility */
+				MX6QDL_PAD_CSI0_DAT16__GPIO6_IO02 0x1f059 /* WL_REG_ON */
+				MX6QDL_PAD_CSI0_DAT17__GPIO6_IO03 0x1f059 /* BT_REG_ON */
+			>;
+		};
+	};
+};
