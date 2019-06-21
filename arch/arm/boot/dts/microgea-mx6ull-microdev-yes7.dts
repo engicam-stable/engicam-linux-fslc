@@ -73,13 +73,13 @@
 
 		UMTS_RESET {
 			gpio-export,name = "UMTS_RESET";
-			gpio-export,output = <0>;
+			gpio-export,output = <1>;
 			gpios = <&gpio1 25 0>;
 		};	
 
 		UMTS_ON {
 			gpio-export,name = "UMTS_ON";
-			gpio-export,output = <1>;
+			gpio-export,output = <0>;
 			gpios = <&gpio5 5 0>;
 		};	
 
