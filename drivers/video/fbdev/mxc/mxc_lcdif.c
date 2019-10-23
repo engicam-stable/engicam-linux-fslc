@@ -43,6 +43,12 @@ static struct fb_videomode lcdif_modedb[] = {
 	FB_VMODE_NONINTERLACED,
 	0,},
 	{
+	/* 480x272 @ 60 Hz  OPENFRAME C.TOUCH.Wi 4.3'' (Ampire LCD) */
+	"AM480x272" , 60, 480, 272, 100000,  8, 2, 11, 2 ,   35 , 2 ,
+ 	0,
+	FB_VMODE_NONINTERLACED,
+	0,},
+	{
 	/* 480x272 @ 60 Hz  OPENFRAME 4.3'' */
 	"URT-8484MD" , 60, 480, 272, 100000,  8, 2, 11, 2 ,   35 , 2 ,
  	FB_SYNC_CLK_LAT_FALL,
