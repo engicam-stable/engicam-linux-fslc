@@ -1,0 +1,88 @@
+/*
+ * Copyright (C) 2013 Freescale Semiconductor, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+/dts-v1/;
+
+#include "imx6dl.dtsi"
+#include "imx6qdl-icore.dtsi"
+ 
+/ {
+	model = "Engicam i.CoreM6 DualLite/Solo open frame wi";
+	compatible = "fsl,imx6-icore", "fsl,imx6dl";
+
+	sound: sound {
+		status="disabled";
+	};
+
+	codec: codec {
+		status="disabled";
+	};
+};
+
+&mxcfb1 {
+	compatible = "fsl,mxc_sdc_fb";
+	disp_dev = "lcd";
+	interface_pix_fmt = "RGB666";
+	mode_str ="Amp-WD";
+	default_bpp = <16>;
+	int_clk = <0>;
+	late_init = <0>;
+	status = "okay";
+};
+
+&mxcfb2 {
+	status = "okay";
+};
+
+&ldb {
+	ipu_id = <0>;
+	sec_ipu_id = <0>;
+};
+
+&usdhc2 {
+	pinctrl-assert-gpios = <&gpio6 2 GPIO_ACTIVE_HIGH>;
+	status = "okay";
+};
+
+&i2c3 {
+
+	polytouch: st1232_ts@55 {
+		compatible = "sitronix,st1232-ts";
+		reg = <0x55>;
+		pinctrl-names = "default";		
+		pinctrl-0 = <&pinctrl_st1232_ts>;
+		interrupt-parent = <&gpio5>;
+		interrupts = <30 0>;	
+		reset-gpios = <&gpio6 0 1>;
+		// Different setting for Ampire/URT
+		// invert_y = <0>; for Ampire  LCD 
+		// invert_y = <1>; for URT  LCD 
+		invert_y = <0>;
+	};
+};
+
+
+&iomuxc {
+	touchpanel{
+		pinctrl_st1232_ts:  st1232-tsgrp  {
+			fsl,pins = <
+				MX6QDL_PAD_CSI0_DAT12__GPIO5_IO30 0x1b0b0 /*interrupt*/ 
+				MX6QDL_PAD_CSI0_DAT14__GPIO6_IO00 0x1b0b0 /*reset edt*/
+			>;
+		};
+	};
+	
+	hog {
+		pinctrl_hog: hoggrp {
+			fsl,pins = <
+				MX6QDL_PAD_EIM_DA7__GPIO3_IO07 0x1f059 /* EIM_DA07 forced to GPIO in */
+				MX6QDL_PAD_CSI0_DAT16__GPIO6_IO02  0x1f059 /* WF111 reset */
+			>;
+		};
+	};
+};

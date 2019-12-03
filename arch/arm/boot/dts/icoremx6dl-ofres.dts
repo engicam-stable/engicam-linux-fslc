@@ -15,6 +15,10 @@
 	model = "Engicam i.CoreM6 DualLite/Solo resistive openframe";
 	compatible = "fsl,imx6-icore", "fsl,imx6dl";
 
+	sound: sound {
+		status="disabled";
+	};
+	
 	codec: codec {
 		status = "disabled";
 	};

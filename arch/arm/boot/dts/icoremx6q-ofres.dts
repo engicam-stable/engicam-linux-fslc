@@ -15,6 +15,10 @@
 	model = "Engicam i.CoreM6 Dual/Quad resistive openframe";
 	compatible = "fsl,imx6-icore", "fsl,imx6q";
 
+	sound: sound {
+		status="disabled";
+	};
+	
 	codec: codec {
 		status = "disabled";
 	};
