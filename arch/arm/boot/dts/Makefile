@@ -270,6 +270,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
 	icoremx6dl-amp-ofcap7.dtb \
 	icoremx6dl-ofcap10.dtb \
 	icoremx6dl-ofcap10-digi.dtb \
+	icoremx6dl-ofcover10.dtb \
 	icoremx6dl-ofcap2-10.dtb \
 	icoremx6dl-ofcap10-emmc.dtb \
 	icoremx6dl-ofres.dtb \
@@ -280,6 +281,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
 	icoremx6q-amp-ofcap7.dtb \
 	icoremx6q-ofcap10.dtb \
 	icoremx6q-ofcap10-digi.dtb \
+	icoremx6q-ofcover10.dtb \
 	icoremx6q-ofcap2-10.dtb \
 	icoremx6q-ofres.dtb \
 	icoremx6q-ofcapwi.dtb \
