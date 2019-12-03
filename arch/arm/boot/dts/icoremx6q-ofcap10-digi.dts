@@ -12,7 +12,7 @@
 #include "imx6qdl-icore.dtsi"
  
 / {
-	model = "Engicam i.CoreM6 Dual/Quad open frame";
+	model = "Engicam i.CoreM6 Dual/Quad open frame cap digiwise";
 	compatible = "fsl,imx6-icore", "fsl,imx6q";
 };
 
