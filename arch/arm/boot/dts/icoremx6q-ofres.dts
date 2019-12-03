@@ -1,0 +1,98 @@
+/*
+ * Copyright (C) 2013 Freescale Semiconductor, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+/dts-v1/;
+#include <dt-bindings/gpio/gpio.h>
+#include "imx6q.dtsi"
+#include "imx6qdl-icore.dtsi"
+
+/ {
+	model = "Engicam i.CoreM6 Dual/Quad resistive openframe";
+	compatible = "fsl,imx6-icore", "fsl,imx6q";
+
+	codec: codec {
+		status = "disabled";
+	};
+};
+
+&ldb {
+	ipu_id = <0>;
+	sec_ipu_id = <0>;
+};
+
+&mxcfb1 {
+	compatible = "fsl,mxc_sdc_fb";
+	disp_dev = "lcd";
+	interface_pix_fmt = "RGB666";
+	mode_str ="Amp-WD";
+	default_bpp = <16>;
+	int_clk = <0>;
+	late_init = <0>;
+	status = "okay";
+};
+
+&mxcfb2 {
+	status = "okay";
+};
+
+/* To be enabled for PCI peripheral.
+   Please enable also the PCI support kernel options:
+   CONFIG_PCI and PCI_IMX6
+&pcie {
+	status = "okay";
+};
+*/
+
+&i2c1 {
+	max11801@48 {
+		compatible = "maxim,max11801";
+		reg = <0x48>;
+		interrupt-parent = <&gpio3>;
+		interrupts = <31 2>;
+		work-mode = <0>;/*DCM mode*/		
+		pinctrl-names = "default";		
+		pinctrl-0 = <&pinctrl_max11801>;
+	};
+};
+
+&iomuxc {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_lvds>;
+	lvdsreset-delay = <30>;
+	lvdsreset-pin = <&gpio6 0 GPIO_ACTIVE_LOW>;
+	lvds {
+		pinctrl_lvds: lvdsgrp {
+			fsl,pins = <
+				MX6QDL_PAD_CSI0_DAT14__GPIO6_IO00 0x1f059 // LVDS reset
+			>;
+		};
+	};
+};
+
+&iomuxc {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_hog1>;
+	pinctrl-assert-gpios = <&gpio1 2 GPIO_ACTIVE_HIGH>;
+
+	touchpanel{
+	  pinctrl_max11801:max11801 {
+			fsl,pins = <
+			    MX6QDL_PAD_EIM_D31__GPIO3_IO31 0x80000000 /* int for max11801 */
+			>;	    
+	  };
+	};
+
+	hog {
+		pinctrl_hog1: hoggrp {
+			fsl,pins = <
+				MX6QDL_PAD_GPIO_2__GPIO1_IO02 0x1f059
+				MX6QDL_PAD_EIM_D19__GPIO3_IO19 0x1f059 /* not used pin for ADV7180 driver compatibility */
+			>;
+		};
+	};
+};
