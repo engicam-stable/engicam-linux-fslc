@@ -285,6 +285,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
 	icoremx6q-ofcap10-digi.dtb \
 	icoremx6q-ofcover10.dtb \
 	icoremx6q-ofcap2-10.dtb \
+	icoremx6q-ofcap10-emmc.dtb \
 	icoremx6q-ofres.dtb \
 	icoremx6q-ofcapwi.dtb \
 	icoremx6q-ofloco10.dtb \
