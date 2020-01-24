@@ -79,6 +79,16 @@
 			regulator-always-on;
 		};
 
+		btreg_on: fixedregulator@200 {
+			compatible = "regulator-fixed";
+			regulator-name = "btreg_on";
+			gpio = <&gpio5 9 0>;
+			startup-delay-us = <100>;
+			enable-active-high;
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+			regulator-always-on;
+		};
 	};
 
 	sound {
@@ -224,7 +234,8 @@
 &uart5 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_uart5>;
-        fsl,uart-has-rtscts;
+	vmmc-supply = <&btreg_on>;
+    fsl,uart-has-rtscts;
 	status = "okay";
 };
 
@@ -233,7 +244,6 @@
 	pinctrl-0 = <&pinctrl_uart8>;
 	status = "okay";
 };
-
 
 &usbotg1 {
 	dr_mode = "peripheral";
@@ -248,13 +258,12 @@
 &usdhc1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_usdhc1>;
-        bus-width = <4>;
+    bus-width = <4>;
 	no-1-8-v;
 	non-removable;
 	keep-power-in-suspend;
 	enable-sdio-wakeup;
 	vmmc-supply = <&wlreg_on>;
-	wifi-host;
 	status = "okay";
 };
 
@@ -263,12 +272,9 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_usdhc2>;
 	no-1-8-v;
-	vmmc-supply = <&reg_out_3v3>;
 	keep-power-in-suspend;
 	non-removable;
 	status = "okay";
-	reset-gpios = <&gpio4 14 1>;	// WF111 reset on GEA M6UL starterkit
-	status = "disabled";
 };
 
 &i2c1 {
