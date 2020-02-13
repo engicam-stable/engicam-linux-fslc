@@ -437,6 +437,7 @@ dtb-$(CONFIG_SOC_IMX6ULL) += \
 	geal-mx6ull-starterkit.dtb \
 	microgea-mx6ull-loco7cap.dtb \
 	microgea-mx6ull-microdev.dtb \
+	microgea-y1-microdev.dtb \
 	microgea-mx6ull-microdev-can.dtb \
 	microgea-mx6ull-starterkit.dtb \
 	microgea-mx6ull-starterkit-cap.dtb \
