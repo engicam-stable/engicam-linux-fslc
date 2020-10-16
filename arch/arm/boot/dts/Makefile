@@ -444,6 +444,7 @@ dtb-$(CONFIG_SOC_IMX6ULL) += \
 	microgea-mx6ull-epd.dtb \
 	microgea-mx6ull-microdev-yes7.dtb \
 	microgea-mx6ull-microdev-yes10.dtb \
+	microgea-mx6ull-microdev-yes7-can.dtb \
 	imx6ull-14x14-ddr3-arm2.dtb \
 	imx6ull-14x14-ddr3-arm2-adc.dtb \
 	imx6ull-14x14-ddr3-arm2-cs42888.dtb \
