@@ -11,11 +11,11 @@
 / {
 	model = "ENGICAM i.MX6 SoloX SMARCORE";
 
-  aliases 
-  {
+	aliases 
+	{
 		mmc0 = &usdhc2;
-		mmc1 = &usdhc4;
-		mmc2 = &usdhc1;
+		mmc1 = &usdhc1;
+		mmc2 = &usdhc4;
 		mmc3 = &usdhc3;
 	};
 	
